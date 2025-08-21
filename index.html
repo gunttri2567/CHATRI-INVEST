@@ -1,243 +1,163 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=0,viewport-fit=cover">
   <title>My LIFF</title>
-  <!-- CSS only -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
   <center>
-  <div class="row g-2">
-  <div class="col-md">
-<div class="mb-3">
-  <label for="exampleFormControlTextarea1" class="form-label">JSON - </label>
-  <a href="https://developers.line.biz/flex-simulator"  target="_blank" class="link-info">FLEX MESSAGE SIMULATOR</a>
-  <textarea class="form-control" id="flexjson" name="flexjson" rows="20" onchange="myFunction()">{
-          "type": "bubble",
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "hello"
-              }
-            ]
-          }
-        }</textarea>  
-</div>
- </div>
+    <div class="row g-2">
+      <div class="col-md">
+        <div class="mb-3">
+          <label class="form-label">JSON - </label>
+          <a href="https://developers.line.biz/flex-simulator" target="_blank" class="link-info">FLEX MESSAGE SIMULATOR</a>
+          <textarea class="form-control" id="flexjson" name="flexjson" rows="20" onchange="myFunction()">
+{
+  "type": "bubble",
+  "body": {
+    "type": "box",
+    "layout": "vertical",
+    "contents": [
+      {"type": "text", "text": "hello"}
+    ]
+  }
+}
+          </textarea>  
+        </div>
+      </div>
     </div>
-</br>
-<div class="input-group mb-3">
-  <input type="text" class="form-control" id="demo" placeholder="Ctrl+C > Copy liff url." aria-label="Ctrl+C > Copy liff url." aria-describedby="basic-addon2">
-  <div class="input-group-append">
-    <button class="btn btn-outline-secondary" type="button">Button</button>
-  </div>
-</div>
 
-  </br>
-  <button type="button" class="btn btn-outline-primary" onclick="flex_1()">Flex1</button>
-  <button type="button" class="btn btn-outline-primary" onclick="flex_2()">Flex2</button>
-  <button type="button" class="btn btn-outline-primary" onclick="flex_3()">Flex3</button>
-  <button type="button" class="btn btn-outline-primary" onclick="flex_4()">Flex4</button>
-</br>
-<button type="button" class="btn btn-success" onclick="saveShare()">Save liff</button>
-<button type="button" class="btn btn-success" onclick="sendShare()">Share Target Picker</button></center>
-  
-  
-  
-  <script charset="utf-8" src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
-  <script>
-    
+    <br>
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" id="demo" placeholder="Ctrl+C > Copy liff url.">
+      <div class="input-group-append">
+        <button class="btn btn-outline-secondary" type="button">Button</button>
+      </div>
+    </div>
 
+    <br>
+    <button class="btn btn-outline-primary" onclick="flex_1()">Flex1</button>
+    <button class="btn btn-outline-primary" onclick="flex_2()">Flex2</button>
+    <button class="btn btn-outline-primary" onclick="flex_3()">Flex3</button>
+    <button class="btn btn-outline-primary" onclick="flex_4()">Flex4</button>
+
+    <br>
+    <button class="btn btn-success" onclick="saveShare()">Save liff</button>
+    <button class="btn btn-success" onclick="sendShare()">Share Target Picker</button>
+  </center>
+
+<script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+<script>
+async function main() {
+  await liff.init({ liffId: "2000581772-nBKodMO3" }); // ใส่ LIFF ID ของคุณ
+  if (!liff.isLoggedIn()) {
+    // ไม่ redirect login อัตโนมัติ แต่สามารถ login ตามปุ่มเองได้
+    console.log("User not logged in, skip redirect.");
+  } else {
+    js_onload_code();
+  }
+}
+
+main();
+
+// โหลดค่า flexid จาก URL อย่างปลอดภัย
 function js_onload_code() {
- var myParam = window.location.search;
-var exc = myParam.split('flexid=')[1].split('&')[0];
-const xurl = "https://script.google.com/macros/s/AKfycbwktB_ZSm_VDDImG85Q4abmjDcBGHQqusr4PMsoWlT1d9fsADr6NaaM81uBnqq4exVL/exec";
-  var xmlhttp = new XMLHttpRequest();
-        var theUrl = xurl+'?flexid='+exc;
-        xmlhttp.open('GET', theUrl);
-        xmlhttp.send();
-            xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var jsonResponse = JSON.parse(this.responseText);
+  const params = new URLSearchParams(window.location.search);
+  const exc = params.get('flexid'); // ถ้าไม่มีจะเป็น null
+  if (!exc) return;
+
+  const xurl = "https://script.google.com/macros/s/AKfycbwktB_ZSm_VDDImG85Q4abmjDcBGHQqusr4PMsoWlT1d9fsADr6NaaM81uBnqq4exVL/exec"; 
+  const xmlhttp = new XMLHttpRequest();
+  xmlhttp.open('GET', xurl + '?flexid=' + exc);
+  xmlhttp.send();
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      try {
+        const jsonResponse = JSON.parse(this.responseText);
+        if (jsonResponse.desc) {
+          const decoded = window.atob(jsonResponse.desc);
+          document.getElementById("flexjson").value = decoded;
         }
-        let decoded = window.atob(jsonResponse.desc);
-document.getElementById("flexjson").value = decoded;
-}
-}
-
-
-
-
-
-function flex_1() {
-  const f1 = {
-          "type": "bubble",
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "hello",
-        "align": "start"
-              }
-            ]
-          }
-        }
-        const myF1 = JSON.stringify(f1);
-document.getElementById("flexjson").value = myF1;
-}
-function flex_2() {
-  const f2 = {
-          "type": "bubble",
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "hello",
-        "align": "center"
-              }
-            ]
-          }
-        }
-        const myF2 = JSON.stringify(f2);
-document.getElementById("flexjson").value = myF2;
-}
-function flex_3() {
-  const f3 = {
-          "type": "bubble",
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "hello",
-        "align": "end"
-              }
-            ]
-          }
-        }
-        const myF3 = JSON.stringify(f3);
-document.getElementById("flexjson").value = myF3;
-}
-function flex_4() {
-  const f4 = {
-          "type": "bubble",
-          "body": {
-            "type": "box",
-            "layout": "vertical",
-            "contents": [
-              {
-                "type": "text",
-                "text": "hello",
-        "color": "#ff0000"
-              }
-            ]
-          }
-        }
-        const myF4 = JSON.stringify(f4);
-document.getElementById("flexjson").value = myF4;
+      } catch(err) {
+        console.error("Error parsing response:", err);
+      }
+    }
+  }
 }
 
+// ปุ่มเลือก flex
+function flex_1() { setFlexText("start"); }
+function flex_2() { setFlexText("center"); }
+function flex_3() { setFlexText("end"); }
+function flex_4() { 
+  const f = { "type":"bubble", "body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"hello","color":"#ff0000"}]}};
+  document.getElementById("flexjson").value = JSON.stringify(f);
+}
+function setFlexText(align) {
+  const f = { "type":"bubble", "body":{"type":"box","layout":"vertical","contents":[{"type":"text","text":"hello","align":align}]}};
+  document.getElementById("flexjson").value = JSON.stringify(f);
+}
+
+// แปลง textarea เป็น object สำหรับส่ง
 function myFunction() {
-  var x = document.getElementById("flexjson").value;
+  const x = document.getElementById("flexjson").value;
   try {
-    x = JSON.parse(x)
-    console.log(x)
-    var flexdat = {}
-    flexdat["type"] = "flex";
-    flexdat["altText"] = "Flex";
-    flexdat["contents"] = x;
-    return flexdat
-  }
-  catch(err){
-    console.log(err)
-    return "failed"
+    const obj = JSON.parse(x);
+    return { type: "flex", altText: "Flex", contents: obj };
+  } catch(err) {
+    console.error(err);
+    return "failed";
   }
 }
 
-
-
+// บันทึกและแชร์
 function saveShare() {
+  const sflex = document.getElementById("flexjson").value;
+  const code = window.btoa(JSON.stringify(sflex));
+  const lid = "lid"+Date.now();
+  document.getElementById("demo").value = "https://liff.line.me/2000581772-nBKodMO3/?flexid="+lid;
 
-//https://liff.line.me/1657153705-YZ1elgn4?flexid=sasasas
+  const xurl = "https://script.google.com/macros/s/AKfycbwktB_ZSm_VDDImG85Q4abmjDcBGHQqusr4PMsoWlT1d9fsADr6NaaM81uBnqq4exVL/exec";
+  const xmlhttp = new XMLHttpRequest();
+  xmlhttp.open("POST", xurl);
+  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+  xmlhttp.send(JSON.stringify({ lid, code }));
 
-
-var sflex = document.getElementById("flexjson").value
-var myF1 = JSON.stringify(sflex);
-let code = window.btoa(myF1);
-let lid = "lid"+Date.now();
-alert(code)
-alert(lid)
-document.getElementById("demo").value = "https://liff.line.me/2000581772-nBKodMO3/?flexid="+lid
-const xurl = "https://script.google.com/macros/s/AKfycbwktB_ZSm_VDDImG85Q4abmjDcBGHQqusr4PMsoWlT1d9fsADr6NaaM81uBnqq4exVL/exec";
-
-var xmlhttp = new XMLHttpRequest();
-var theUrl = xurl;
-xmlhttp.open("POST", theUrl);
-xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-xmlhttp.setRequestHeader("Access-Control-Allow-Origin", "https://gunttri2567.github.io/");
-xmlhttp.send(JSON.stringify({ "lid": lid, "code": code}));
-            xmlhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            var jsonResponse = JSON.parse(this.responseText);
-        }
-        alert(jsonResponse.desc);
-}
-
-}
-    
-    async function sendShare() {
-if(myFunction() !== "failed"){
-        const result = await liff.shareTargetPicker([myFunction()])
-      if (result) {
-        alert(`[${result.status}] Message sent!`)
-        liff.closeWindow();
-      } else {
-        const [majorVer, minorVer, patchVer] = (liff.getLineVersion() || "").split('.');
-
-        if (minorVer === undefined) {
-          alert('ShareTargetPicker was canceled in external browser')
-          return
-        }
-
-        if (parseInt(majorVer) >= 10 && parseInt(minorVer) >= 10 && parseInt(patchVer) > 0) {
-          alert('ShareTargetPicker was canceled in LINE app')
-        }
-      }
-}else{
-  alert("JSON Incorrect.")
-}
-    }
-    function logOut() {
-      liff.logout()
-      window.location.reload()
-    }
-
-
-
-    async function main() {
-      await liff.init({ liffId: "2000581772-nBKodMO3" })
-      if (liff.isLoggedIn()) {
-        js_onload_code()
-      /*  if (!liff.isInClient()) {
-          logOut()
-        }*/
-      } else {
-        liff.login()
+  xmlhttp.onreadystatechange = function() {
+    if (this.readyState === 4 && this.status === 200) {
+      try {
+        const jsonResponse = JSON.parse(this.responseText);
+        if (jsonResponse.desc) alert(jsonResponse.desc);
+      } catch(err) {
+        console.error(err);
       }
     }
-    main()
-  </script>
-  <!-- JavaScript Bundle with Popper -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  }
+}
+
+async function sendShare() {
+  const flexObj = myFunction();
+  if (flexObj !== "failed") {
+    const result = await liff.shareTargetPicker([flexObj]);
+    if (result) {
+      alert(`[${result.status}] Message sent!`);
+      liff.closeWindow();
+    } else {
+      alert('ShareTargetPicker canceled.');
+    }
+  } else {
+    alert("JSON Incorrect.");
+  }
+}
+
+function logOut() {
+  liff.logout();
+  window.location.reload();
+}
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
