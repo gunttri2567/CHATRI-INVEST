@@ -82,7 +82,7 @@
     const exc = params.get('flexid');
     if (!exc) return;
 
-    const xurl = "YOUR_GAS_DEPLOY_URL"; // ✅ แก้เป็น WebApp ของ GAS
+    const xurl = "https://script.google.com/macros/s/AKfycbwktB_ZSm_VDDImG85Q4abmjDcBGHQqusr4PMsoWlT1d9fsADr6NaaM81uBnqq4exVL/exec"; // ✅ แก้เป็น WebApp ของ GAS
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.open('GET', xurl + '?flexid=' + exc);
     xmlhttp.send();
@@ -129,9 +129,9 @@
     const sflex = document.getElementById("flexjson").value;
     const code = window.btoa(sflex);
     const lid = "lid" + Date.now();
-    document.getElementById("demo").value = "https://liff.line.me/2000581772-gOdlPay1/?flexid=" + lid;
+    document.getElementById("demo").value = "https://liff.line.me/2000581772-8mWaqgk1/?flexid=" + lid;
 
-    const xurl = "YOUR_GAS_DEPLOY_URL"; // ✅ ใส่ URL WebApp ของ GAS
+    const xurl = "https://script.google.com/macros/s/AKfycbwktB_ZSm_VDDImG85Q4abmjDcBGHQqusr4PMsoWlT1d9fsADr6NaaM81uBnqq4exVL/exec"; // ✅ ใส่ URL WebApp ของ GAS
     const xmlhttp = new XMLHttpRequest();
     xmlhttp.open("POST", xurl);
     xmlhttp.setRequestHeader("Content-Type","application/json;charset=UTF-8");
@@ -174,3 +174,4 @@
   </script>
 </body>
 </html>
+
