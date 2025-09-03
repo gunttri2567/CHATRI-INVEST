@@ -193,7 +193,7 @@
 
   // แสดง URL LIFF ที่จะใช้ preview
   document.getElementById("demo").value =
-    "https://liff.line.me/2000581772-JOlB7aEX/?flexid=" + lid;
+    "https://liff.line.me/2000581772-7YjqnkvM/?flexid=" + lid;
 
   // URL Web App ของ GAS (ปรับเป็นของคุณเอง)
   const xurl =
@@ -234,7 +234,7 @@
 
     // ---------- LIFF Init ----------
     async function main() {
-      await liff.init({ liffId: "2000581772-JOlB7aEX" });
+      await liff.init({ liffId: "2000581772-7YjqnkvM" });
       if (liff.isLoggedIn()) { safePreview(); } else { liff.login(); }
       let t=null; document.getElementById('flexjson').addEventListener('input',()=>{ clearTimeout(t); t=setTimeout(safePreview,300); });
     }
