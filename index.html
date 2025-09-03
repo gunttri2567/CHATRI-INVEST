@@ -57,13 +57,13 @@
   "size": "giga",
   "hero": {
     "type": "image",
-    "url": "https://raw.githubusercontent.com/gunttri2567/triliff2025/refs/heads/branch/images/1035089.jpg",
+    "url": "https://raw.githubusercontent.com/gunttri2567/CHATRI-INVEST/refs/heads/branch/images/1035089.jpg",
     "size": "full",
     "aspectRatio": "1108:1478",
     "aspectMode": "cover",
     "action": {
       "type": "uri",
-      "uri": "https://raw.githubusercontent.com/gunttri2567/triliff2025/refs/heads/branch/images/1035089.jpg"
+      "uri": "https://raw.githubusercontent.com/gunttri2567/CHATRI-INVEST/refs/heads/branch/images/1035089.jpg"
     }
   }
 }</textarea>
@@ -186,41 +186,41 @@
     function myFunction(){ return buildFlexMessageFromTextarea(); }
 
     function saveShare() {
-  var sflex = document.getElementById("flexjson").value;
-  var alt = document.getElementById("altText").value.trim() || "Flex Preview";
-  let code = window.btoa(sflex); // เข้ารหัส base64
-  let lid = "lid" + Date.now();
+      var sflex = document.getElementById("flexjson").value;
+      var alt = document.getElementById("altText").value.trim() || "Flex Preview";
+      let code = window.btoa(sflex); // เข้ารหัส base64
+      let lid = "lid" + Date.now();
 
-  // แสดง URL LIFF ที่จะใช้ preview
-  document.getElementById("demo").value =
-    "https://liff.line.me/2000581772-7YjqnkvM/?flexid=" + lid;
+      // แสดง URL LIFF ที่จะใช้ preview
+      document.getElementById("demo").value =
+        "https://liff.line.me/2000581772-7YjqnkvM/?flexid=" + lid;
 
-  // URL Web App ของ GAS (ปรับเป็นของคุณเอง)
-  const xurl =
-    "https://script.google.com/macros/s/AKfycbwktB_ZSm_VDDImG85Q4abmjDcBGHQqusr4PMsoWlT1d9fsADr6NaaM81uBnqq4exVL/exec";
+      // URL Web App ของ GAS (ปรับเป็นของคุณเอง)
+      const xurl =
+        "https://script.google.com/macros/s/AKfycbwktB_ZSm_VDDImG85Q4abmjDcBGHQqusr4PMsoWlT1d9fsADr6NaaM81uBnqq4exVL/exec";
 
-  var payload = {
-    lid: lid,
-    desc: code,
-    altText: alt
-  };
+      var payload = {
+        lid: lid,
+        desc: code,
+        altText: alt
+      };
 
-  var xmlhttp = new XMLHttpRequest();
-  xmlhttp.open("POST", xurl);
-  xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-  xmlhttp.send(JSON.stringify(payload));
+      var xmlhttp = new XMLHttpRequest();
+      xmlhttp.open("POST", xurl);
+      xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
+      xmlhttp.send(JSON.stringify(payload));
 
-  xmlhttp.onreadystatechange = function () {
-    if (this.readyState == 4 && this.status == 200) {
-      var jsonResponse = JSON.parse(this.responseText);
-      if (jsonResponse.status === "success") {
-        alert("บันทึกแล้ว: " + jsonResponse.desc);
-      } else {
-        alert("Error: " + jsonResponse.message);
-      }
+      xmlhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          var jsonResponse = JSON.parse(this.responseText);
+          if (jsonResponse.status === "success") {
+            alert("บันทึกแล้ว: " + jsonResponse.desc);
+          } else {
+            alert("Error: " + jsonResponse.message);
+          }
+        }
+      };
     }
-  };
-}
 
     async function sendShare() {
       const msg = buildFlexMessageFromTextarea();
@@ -244,6 +244,3 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-
-
